@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sinclair's Landscape & Gardening Services | Basingstoke</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --forest:#0f3d24;
+  --forest-dark:#0a2a19;
+  --leaf:#2e7d4f;
+  --leaf-light:#4caf6f;
+  --amber:#e8873a;
+  --amber-light:#f4a35e;
+  --cream:#fbf8f1;
+  --paper:#ffffff;
+  --ink:#132118;
+  --muted:#5c6d63;
+  --line:#e6e2d6;
+  --shadow: 0 20px 50px -20px rgba(15,61,36,0.35);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{font-family:'Poppins',sans-serif;color:var(--ink);background:var(--cream);overflow-x:hidden;}
+h1,h2,h3,.font-display{font-family:'Playfair Display',serif;}
+a{text-decoration:none;color:inherit;}
+img{max-width:100%;display:block;}
+.container{max-width:1180px;margin:0 auto;padding:0 24px;}
+.reveal{opacity:0;transform:translateY(36px);transition:opacity .8s cubic-bezier(.16,1,.3,1), transform .8s cubic-bezier(.16,1,.3,1);}
+.reveal.visible{opacity:1;transform:translateY(0);}
+.reveal-scale{opacity:0;transform:scale(.9);transition:opacity .7s ease, transform .7s cubic-bezier(.16,1,.3,1);}
+.reveal-scale.visible{opacity:1;transform:scale(1);}
+.reveal-left{opacity:0;transform:translateX(-40px);transition:opacity .8s ease, transform .8s cubic-bezier(.16,1,.3,1);}
+.reveal-left.visible{opacity:1;transform:translateX(0);}
+.reveal-right{opacity:0;transform:translateX(40px);transition:opacity .8s ease, transform .8s cubic-bezier(.16,1,.3,1);}
+.reveal-right.visible{opacity:1;transform:translateX(0);}
+.stagger > *{transition-delay:calc(var(--i, 0) * 0.12s);}
+
+/* ---------- NAV ---------- */
+header{
+  position:fixed; top:0; left:0; right:0; z-index:1000;
+  display:flex; align-items:center; justify-content:space-between;
+  padding:16px 5%;
+  background:rgba(15,61,36,0.0);
+  transition: background .4s ease, box-shadow .4s ease, padding .4s ease;
+}
+header.scrolled{
+  background:rgba(15,61,36,0.94);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 8px 30px rgba(0,0,0,0.25);
+  padding:10px 5%;
+}
+.brand{display:flex; align-items:center; gap:12px; color:#fff;}
+.brand .mark{
+  width:46px;height:46px;border-radius:50%;
+  background:radial-gradient(circle at 35% 30%, var(--leaf-light), var(--forest) 70%);
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 0 0 3px rgba(255,255,255,0.15);
+  font-size:22px;
+}
+.brand .name{font-family:'Playfair Display',serif; font-weight:700; font-size:19px; line-height:1.1;}
+.brand .name span{display:block; font-family:'Poppins',sans-serif; font-weight:400; font-size:10.5px; letter-spacing:2px; color:var(--amber-light); text-transform:uppercase;}
+nav ul{display:flex; gap:34px; list-style:none;}
+nav a{color:#fff; font-size:14.5px; font-weight:500; letter-spacing:.3px; position:relative; padding-bottom:6px;}
+nav a::after{content:'';position:absolute;bottom:0;left:0;width:0;height:2px;background:var(--amber-light);transition:width .3s ease;}
+nav a:hover::after{width:100%;}
+.nav-cta{display:flex;align-items:center;gap:14px;}
+.btn{
+  display:inline-flex;align-items:center;gap:8px;
+  background:linear-gradient(135deg,var(--amber),var(--amber-light));
+  color:#1a1a1a; font-weight:600; font-size:14px;
+  padding:11px 22px; border-radius:30px;
+  box-shadow:0 10px 25px -8px rgba(232,135,58,0.6);
+  transition:transform .25s ease, box-shadow .25s ease;
+}
+.btn:hover{transform:translateY(-3px); box-shadow:0 16px 30px -8px rgba(232,135,58,0.75);}
+.btn-outline{
+  border:1.5px solid rgba(255,255,255,0.55); color:#fff; padding:10px 20px; border-radius:30px; font-size:14px; font-weight:500;
+  display:flex; align-items:center; gap:8px;
+  transition:background .3s ease, border-color .3s ease;
+}
+.btn-outline:hover{background:rgba(255,255,255,0.12); border-color:#fff;}
+.wa-icon{width:20px;height:20px;flex-shrink:0;}
+.burger{display:none; flex-direction:column; gap:5px; cursor:pointer; z-index:1100;}
+.burger span{width:26px;height:2.5px;background:#fff;border-radius:2px;transition:.3s;}
+
+/* ---------- HERO ---------- */
+.hero{
+  position:relative; min-height:100vh;
+  display:flex; align-items:center;
+  background:
+    linear-gradient(120deg, rgba(10,42,25,0.88) 0%, rgba(15,61,36,0.72) 45%, rgba(15,61,36,0.55) 100%),
+    linear-gradient(160deg, #1c4d2c, #0a2a19 60%);
+  overflow:hidden;
+}
+.hero::before{
+  content:'';position:absolute; inset:0;
+  background-image:
+    radial-gradient(circle at 15% 20%, rgba(76,175,111,0.25), transparent 40%),
+    radial-gradient(circle at 85% 75%, rgba(232,135,58,0.18), transparent 45%);
+  animation: driftGlow 14s ease-in-out infinite alternate;
+}
+@keyframes driftGlow{ 0%{transform:translate(0,0);} 100%{transform:translate(-30px,20px);} }
+.hero-leaves{position:absolute; inset:0; pointer-events:none;}
+.leaf-particle{
+  position:absolute; opacity:.35; font-size:26px; color:var(--leaf-light);
+  animation: floatLeaf linear infinite;
+}
+@keyframes floatLeaf{
+  0%{transform:translateY(110vh) rotate(0deg); opacity:0;}
+  10%{opacity:.5;}
+  90%{opacity:.4;}
+  100%{transform:translateY(-10vh) rotate(360deg); opacity:0;}
+}
+.hero-content{position:relative; z-index:2; max-width:700px; padding:140px 5% 100px;}
+.hero-badge{
+  display:inline-flex; align-items:center; gap:10px; background:rgba(255,255,255,0.1);
+  border:1px solid rgba(255,255,255,0.25); color:var(--amber-light);
+  padding:8px 18px; border-radius:30px; font-size:13px; font-weight:600; letter-spacing:1.5px; text-transform:uppercase;
+  margin-bottom:26px; backdrop-filter:blur(6px);
+}
+.hero-badge .dot{width:8px;height:8px;border-radius:50%;background:var(--amber-light); box-shadow:0 0 0 0 rgba(232,135,58,.7); animation:pulseDot 1.8s infinite;}
+@keyframes pulseDot{0%{box-shadow:0 0 0 0 rgba(232,135,58,.7);}70%{box-shadow:0 0 0 10px rgba(232,135,58,0);}100%{box-shadow:0 0 0 0 rgba(232,135,58,0);}}
+.hero h1{
+  color:#fff; font-size:56px; line-height:1.1; font-weight:700; margin-bottom:22px;
+}
+.hero h1 em{font-style:italic; color:var(--amber-light);}
+.hero p.lead{color:rgba(255,255,255,0.85); font-size:18px; line-height:1.7; margin-bottom:36px; max-width:560px;}
+.hero-ctas{display:flex; gap:16px; flex-wrap:wrap; margin-bottom:56px;}
+.hero-stats{display:flex; gap:40px; flex-wrap:wrap;}
+.hero-stats div{color:#fff;}
+.hero-stats .num{font-family:'Playfair Display',serif; font-size:34px; font-weight:700; color:var(--amber-light); display:flex; align-items:baseline; gap:4px;}
+.hero-stats .lbl{font-size:12.5px; letter-spacing:1px; text-transform:uppercase; color:rgba(255,255,255,0.65); margin-top:4px;}
+.scroll-cue{
+  position:absolute; bottom:34px; left:50%; transform:translateX(-50%); z-index:2;
+  color:rgba(255,255,255,0.7); display:flex; flex-direction:column; align-items:center; gap:8px; font-size:11px; letter-spacing:2px; text-transform:uppercase;
+}
+.scroll-cue .line{width:1px;height:34px;background:linear-gradient(to bottom, rgba(255,255,255,.8), transparent); animation:scrollLine 2s infinite;}
+@keyframes scrollLine{0%{transform:scaleY(0); transform-origin:top;} 50%{transform:scaleY(1); transform-origin:top;} 51%{transform-origin:bottom;} 100%{transform:scaleY(0); transform-origin:bottom;}}
+
+/* ---------- SECTION HEADINGS ---------- */
+.section{padding:110px 0;}
+.section-tag{
+  color:var(--leaf); font-weight:600; font-size:13px; letter-spacing:2.5px; text-transform:uppercase;
+  display:flex; align-items:center; gap:10px; margin-bottom:16px; justify-content:center;
+}
+.section-tag::before, .section-tag::after{content:'';width:28px;height:1.5px;background:var(--amber);}
+.section-head{text-align:center; max-width:640px; margin:0 auto 60px;}
+.section-head h2{font-size:40px; color:var(--forest); font-weight:700; line-height:1.2;}
+.section-head p{color:var(--muted); font-size:16px; margin-top:16px; line-height:1.7;}
+
+/* ---------- TRUST STRIP ---------- */
+.trust-strip{background:var(--forest-dark); padding:34px 0;}
+.trust-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:20px;}
+.trust-item{display:flex; align-items:center; gap:14px; color:#fff;}
+.trust-item .ic{
+  width:50px;height:50px;border-radius:14px; flex-shrink:0;
+  background:linear-gradient(135deg, var(--leaf), var(--forest)); display:flex;align-items:center;justify-content:center;font-size:22px;
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,0.1);
+}
+.trust-item strong{display:block; font-size:15px; font-weight:600;}
+.trust-item span{font-size:12.5px; color:rgba(255,255,255,0.6);}
+
+/* ---------- SERVICES ---------- */
+.services{background:var(--paper);}
+.service-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:28px;}
+.service-card{
+  position:relative; background:var(--cream); border-radius:24px; padding:38px 34px;
+  overflow:hidden; border:1px solid var(--line);
+  transition: transform .45s cubic-bezier(.16,1,.3,1), box-shadow .45s ease, background .45s ease;
+}
+.service-card::before{
+  content:''; position:absolute; top:-60px; right:-60px; width:180px; height:180px; border-radius:50%;
+  background:radial-gradient(circle, rgba(76,175,111,0.18), transparent 70%);
+  transition:transform .6s ease;
+}
+.service-card:hover{
+  transform:translateY(-10px);
+  box-shadow: var(--shadow);
+  background:#fff;
+}
+.service-card:hover::before{transform:scale(1.4);}
+.service-icon-wrap{
+  width:72px;height:72px;border-radius:20px;
+  background:linear-gradient(135deg, var(--leaf-light), var(--leaf));
+  display:flex;align-items:center;justify-content:center;
+  margin-bottom:24px; font-size:32px; color:#fff;
+  box-shadow:0 14px 30px -10px rgba(46,125,79,0.55);
+  transition:transform .5s cubic-bezier(.34,1.56,.64,1), border-radius .5s ease;
+}
+.service-card:hover .service-icon-wrap{transform:rotate(-8deg) scale(1.08); border-radius:50% 20% 50% 20%;}
+.service-card.amber .service-icon-wrap{background:linear-gradient(135deg, var(--amber-light), var(--amber)); box-shadow:0 14px 30px -10px rgba(232,135,58,0.55);}
+.service-card h3{font-size:22px; color:var(--forest); margin-bottom:12px; font-weight:700;}
+.service-card p.desc{color:var(--muted); font-size:14.5px; margin-bottom:18px; line-height:1.6;}
+.service-card ul{list-style:none;}
+.service-card ul li{
+  display:flex; align-items:center; gap:10px; font-size:14.5px; color:var(--ink); padding:7px 0;
+  border-top:1px dashed var(--line);
+}
+.service-card ul li:first-child{border-top:none;}
+.service-card ul li .check{
+  width:19px;height:19px;border-radius:50%;background:var(--leaf); color:#fff; font-size:11px;
+  display:flex;align-items:center;justify-content:center; flex-shrink:0;
+}
+.service-card.amber ul li .check{background:var(--amber);}
+
+/* ---------- WHY US / PROCESS ---------- */
+.why{background:linear-gradient(180deg, var(--forest-dark), var(--forest)); color:#fff; position:relative;}
+.why::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 80% 20%, rgba(232,135,58,0.12), transparent 50%);}
+.why .section-head h2{color:#fff;}
+.why .section-head p{color:rgba(255,255,255,0.7);}
+.why-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:26px; position:relative; z-index:1;}
+.why-card{
+  background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.12); border-radius:20px; padding:32px 24px;
+  text-align:center; backdrop-filter:blur(6px);
+  transition:transform .4s cubic-bezier(.16,1,.3,1), background .4s ease;
+}
+.why-card:hover{transform:translateY(-8px); background:rgba(255,255,255,0.11);}
+.why-card .num{
+  width:52px;height:52px;border-radius:50%; margin:0 auto 18px; display:flex;align-items:center;justify-content:center;
+  background:linear-gradient(135deg, var(--amber-light), var(--amber)); font-weight:700; font-family:'Playfair Display',serif; font-size:20px; color:#1a1a1a;
+}
+.why-card h4{font-size:17px; margin-bottom:10px; font-weight:600;}
+.why-card p{font-size:13.5px; color:rgba(255,255,255,0.68); line-height:1.6;}
+
+/* ---------- GALLERY / SHOWCASE ---------- */
+.showcase{background:var(--cream);}
+.showcase-grid{display:grid; grid-template-columns:1.1fr 0.9fr; gap:30px; align-items:center;}
+.showcase-visual{position:relative; border-radius:28px; overflow:hidden; height:460px; box-shadow:var(--shadow);}
+.showcase-visual .layer{position:absolute; inset:0; background:linear-gradient(150deg, #1f5c37, #0f3d24 65%);}
+.showcase-visual .grain{
+  position:absolute; inset:0;
+  background-image: repeating-linear-gradient(135deg, rgba(255,255,255,0.04) 0 2px, transparent 2px 30px);
+}
+.showcase-visual .path{
+  position:absolute; bottom:0; left:0; right:0; height:60%;
+  background:linear-gradient(0deg, rgba(232,135,58,0.18), transparent);
+}
+.blob{position:absolute; border-radius:50%; filter:blur(2px); opacity:.5; animation:blobFloat 8s ease-in-out infinite;}
+@keyframes blobFloat{0%,100%{transform:translateY(0) scale(1);}50%{transform:translateY(-16px) scale(1.05);}}
+.blob.b1{width:120px;height:120px;background:radial-gradient(circle, var(--leaf-light), transparent 70%); top:14%; left:10%;}
+.blob.b2{width:90px;height:90px;background:radial-gradient(circle, var(--amber-light), transparent 70%); bottom:18%; right:14%; animation-delay:1.5s;}
+.blob.b3{width:60px;height:60px;background:radial-gradient(circle, #fff, transparent 70%); top:40%; right:22%; animation-delay:.8s; opacity:.2;}
+.showcase-visual .content-mark{position:absolute; inset:0; display:flex; align-items:center; justify-content:center; flex-direction:column; color:#fff; text-align:center; padding:40px;}
+.showcase-visual .content-mark .icon{font-size:64px; margin-bottom:18px; animation:swayIcon 4s ease-in-out infinite;}
+@keyframes swayIcon{0%,100%{transform:rotate(-4deg);}50%{transform:rotate(4deg);}}
+.showcase-visual .content-mark h3{font-size:26px; margin-bottom:10px;}
+.showcase-visual .content-mark p{font-size:14px; color:rgba(255,255,255,0.75); max-width:320px;}
+.showcase-text h2{font-size:36px; color:var(--forest); margin-bottom:20px; font-weight:700; line-height:1.25;}
+.showcase-text p{color:var(--muted); font-size:16px; line-height:1.75; margin-bottom:26px;}
+.showcase-list{display:flex; flex-direction:column; gap:16px; margin-bottom:30px;}
+.showcase-list .row{display:flex; align-items:flex-start; gap:14px;}
+.showcase-list .row .ic{
+  width:38px;height:38px;border-radius:11px;background:linear-gradient(135deg, var(--leaf-light), var(--leaf)); color:#fff;
+  display:flex;align-items:center;justify-content:center; font-size:17px; flex-shrink:0; margin-top:2px;
+}
+.showcase-list .row div strong{display:block; font-size:15.5px; color:var(--ink);}
+.showcase-list .row div span{font-size:14px; color:var(--muted);}
+
+/* ---------- TESTIMONIAL ---------- */
+.testimonial{background:var(--paper); position:relative;}
+.testi-card{
+  max-width:760px; margin:0 auto; text-align:center; background:var(--cream); border-radius:28px; padding:60px 50px;
+  border:1px solid var(--line); position:relative;
+}
+.testi-card .quote-mark{font-family:'Playfair Display',serif; font-size:90px; color:var(--amber); line-height:0; position:absolute; top:24px; left:38px; opacity:.5;}
+.testi-card p{font-size:22px; font-style:italic; color:var(--forest); line-height:1.6; margin-bottom:26px; font-family:'Playfair Display',serif;}
+.stars{color:var(--amber); font-size:20px; margin-bottom:18px; letter-spacing:4px;}
+.testi-name{font-weight:600; color:var(--ink);}
+.testi-role{font-size:13px; color:var(--muted);}
+
+/* ---------- CTA / CONTACT ---------- */
+.cta{
+  background:linear-gradient(135deg, var(--forest-dark), var(--forest) 60%, #1c4d2c);
+  color:#fff; position:relative; overflow:hidden;
+}
+.cta::before{content:'';position:absolute; inset:0; background:radial-gradient(circle at 20% 30%, rgba(76,175,111,0.25), transparent 45%), radial-gradient(circle at 85% 70%, rgba(232,135,58,0.2), transparent 45%);}
+.cta-inner{position:relative; z-index:1; display:grid; grid-template-columns:1.1fr 0.9fr; gap:50px; align-items:center;}
+.cta h2{font-size:38px; margin-bottom:18px; font-weight:700;}
+.cta p{color:rgba(255,255,255,0.78); font-size:16px; line-height:1.7; margin-bottom:30px; max-width:480px;}
+.contact-card{
+  background:rgba(255,255,255,0.07); border:1px solid rgba(255,255,255,0.15); border-radius:24px; padding:40px; backdrop-filter:blur(8px);
+}
+.contact-row{display:flex; align-items:center; gap:16px; padding:16px 0; border-bottom:1px solid rgba(255,255,255,0.12);}
+.contact-row:last-child{border-bottom:none;}
+.contact-row .ic{
+  width:46px;height:46px;border-radius:13px; background:linear-gradient(135deg, var(--amber-light), var(--amber)); color:#1a1a1a;
+  display:flex;align-items:center;justify-content:center;font-size:19px; flex-shrink:0;
+}
+.contact-row .info{display:flex; flex-direction:column;}
+.contact-row .info span.lbl{font-size:11.5px; letter-spacing:1.5px; text-transform:uppercase; color:rgba(255,255,255,0.55);}
+.contact-row .info a, .contact-row .info span.val{font-size:16px; font-weight:600; color:#fff;}
+.phone-line{display:flex; align-items:center; gap:12px;}
+.wa-badge{
+  width:34px;height:34px;border-radius:50%; background:#25D366; display:flex;align-items:center;justify-content:center;
+  box-shadow:0 6px 16px -4px rgba(37,211,102,0.7); transition:transform .3s ease;
+  animation:waPulse 2.4s infinite;
+}
+.wa-badge:hover{transform:scale(1.15) rotate(8deg);}
+@keyframes waPulse{0%{box-shadow:0 0 0 0 rgba(37,211,102,0.55);}70%{box-shadow:0 0 0 9px rgba(37,211,102,0);}100%{box-shadow:0 0 0 0 rgba(37,211,102,0);}}
+.wa-badge svg{width:19px;height:19px;}
+.contact-card .btn{width:100%; justify-content:center; margin-top:10px;}
+
+/* Floating WhatsApp button */
+.wa-float{
+  position:fixed; bottom:26px; right:26px; z-index:999;
+  width:60px;height:60px;border-radius:50%; background:#25D366; display:flex;align-items:center;justify-content:center;
+  box-shadow:0 12px 30px -6px rgba(37,211,102,0.65);
+  animation:waPulse 2.4s infinite;
+  transition:transform .3s ease;
+}
+.wa-float:hover{transform:scale(1.1);}
+.wa-float svg{width:30px;height:30px;}
+
+/* ---------- FOOTER ---------- */
+footer{background:var(--forest-dark); color:rgba(255,255,255,0.65); padding:50px 0 24px; font-size:13.5px;}
+.footer-top{display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:20px; padding-bottom:30px; border-bottom:1px solid rgba(255,255,255,0.1); margin-bottom:24px;}
+.footer-brand{display:flex; align-items:center; gap:12px; color:#fff;}
+.footer-brand .mark{width:38px;height:38px;border-radius:50%; background:radial-gradient(circle at 35% 30%, var(--leaf-light), var(--forest) 70%); display:flex;align-items:center;justify-content:center; font-size:18px;}
+.footer-links{display:flex; gap:26px;}
+.footer-bottom{display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px;}
+
+/* ---------- MOBILE ---------- */
+@media (max-width:980px){
+  nav{position:fixed; top:0; right:-100%; height:100vh; width:78%; background:var(--forest-dark); flex-direction:column; justify-content:center; transition:right .4s ease; z-index:1050;}
+  nav.open{right:0;}
+  nav ul{flex-direction:column; align-items:center; gap:26px;}
+  .nav-cta{display:none;}
+  .burger{display:flex;}
+  .hero h1{font-size:38px;}
+  .hero-content{padding-top:120px;}
+  .trust-grid, .why-grid{grid-template-columns:repeat(2,1fr);}
+  .service-grid{grid-template-columns:1fr;}
+  .showcase-grid, .cta-inner{grid-template-columns:1fr;}
+  .showcase-visual{height:320px;}
+  .section{padding:70px 0;}
+}
+</style>
+</head>
+<body>
+
+<header id="siteHeader">
+  <a href="#home" class="brand">
+    <div class="mark">🌳</div>
+    <div class="name">Sinclair's<span>Landscape &amp; Gardening Services</span></div>
+  </a>
+  <div class="burger" id="burger"><span></span><span></span><span></span></div>
+  <nav id="mainNav">
+    <ul>
+      <li><a href="#home">Home</a></li>
+      <li><a href="#services">Services</a></li>
+      <li><a href="#why">Why Us</a></li>
+      <li><a href="#work">Our Work</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+  <div class="nav-cta">
+    <a href="https://wa.me/447466561093?text=Hi%20Sinclair's%2C%20I'd%20like%20a%20free%20quote" class="btn-outline" target="_blank">
+      <svg class="wa-icon" viewBox="0 0 32 32" fill="#25D366"><path d="M16 0C7.163 0 0 7.163 0 16c0 2.837.744 5.5 2.05 7.8L0 32l8.4-2.2A15.9 15.9 0 0 0 16 32c8.837 0 16-7.163 16-16S24.837 0 16 0zm0 29.2c-2.55 0-4.95-.7-7-1.95l-.5-.3-4.65 1.2 1.25-4.55-.35-.55A13.15 13.15 0 0 1 2.8 16C2.8 8.7 8.7 2.8 16 2.8S29.2 8.7 29.2 16 23.3 29.2 16 29.2zm7.25-9.9c-.4-.2-2.35-1.15-2.7-1.3-.35-.15-.6-.2-.85.2-.25.35-1 1.3-1.2 1.55-.25.25-.45.3-.85.1-2.25-1.1-3.75-2.05-5.25-4.65-.4-.7.4-.65 1.15-2.15.15-.25.05-.45-.05-.65-.1-.2-.9-2.2-1.25-3-.3-.75-.65-.65-.9-.65-.25 0-.55 0-.85 0-.3 0-.75.1-1.15.55-.4.45-1.55 1.5-1.55 3.65s1.6 4.25 1.85 4.55c.25.3 3.15 4.85 7.75 6.55 3.85 1.45 3.85.95 4.55.85.7-.1 2.35-.95 2.7-1.9.35-.95.35-1.75.25-1.9-.1-.15-.35-.25-.75-.45z"/></svg>
+      07466 561093
+    </a>
+    <a href="#contact" class="btn">Get Free Quote</a>
+  </div>
+</header>
+
+<section class="hero" id="home">
+  <div class="hero-leaves" id="heroLeaves"></div>
+  <div class="hero-content">
+    <div class="hero-badge reveal"><span class="dot"></span>Now booking for Autumn tidy-ups</div>
+    <h1 class="reveal">Beautiful Gardens, <em>Grown</em> With Care</h1>
+    <p class="lead reveal">Affordable, reliable landscaping and gardening across Basingstoke and the surrounding area. From weekly lawn care to full garden makeovers — we treat every garden like our own.</p>
+    <div class="hero-ctas reveal">
+      <a href="#contact" class="btn">Get a Free Quote →</a>
+      <a href="https://wa.me/447466561093?text=Hi%20Sinclair's%2C%20I'd%20like%20a%20free%20quote" target="_blank" class="btn-outline">
+        <svg class="wa-icon" viewBox="0 0 32 32" fill="#25D366"><path d="M16 0C7.163 0 0 7.163 0 16c0 2.837.744 5.5 2.05 7.8L0 32l8.4-2.2A15.9 15.9 0 0 0 16 32c8.837 0 16-7.163 16-16S24.837 0 16 0zm0 29.2c-2.55 0-4.95-.7-7-1.95l-.5-.3-4.65 1.2 1.25-4.55-.35-.55A13.15 13.15 0 0 1 2.8 16C2.8 8.7 8.7 2.8 16 2.8S29.2 8.7 29.2 16 23.3 29.2 16 29.2zm7.25-9.9c-.4-.2-2.35-1.15-2.7-1.3-.35-.15-.6-.2-.85.2-.25.35-1 1.3-1.2 1.55-.25.25-.45.3-.85.1-2.25-1.1-3.75-2.05-5.25-4.65-.4-.7.4-.65 1.15-2.15.15-.25.05-.45-.05-.65-.1-.2-.9-2.2-1.25-3-.3-.75-.65-.65-.9-.65-.25 0-.55 0-.85 0-.3 0-.75.1-1.15.55-.4.45-1.55 1.5-1.55 3.65s1.6 4.25 1.85 4.55c.25.3 3.15 4.85 7.75 6.55 3.85 1.45 3.85.95 4.55.85.7-.1 2.35-.95 2.7-1.9.35-.95.35-1.75.25-1.9-.1-.15-.35-.25-.75-.45z"/></svg>
+        Chat on WhatsApp
+      </a>
+    </div>
+    <div class="hero-stats reveal">
+      <div><div class="num">100<span>%</span></div><div class="lbl">Satisfaction focus</div></div>
+      <div><div class="num">Fully</div><div class="lbl">Insured &amp; dependable</div></div>
+      <div><div class="num">Local</div><div class="lbl">Basingstoke-based</div></div>
+    </div>
+  </div>
+  <div class="scroll-cue"><span>Scroll</span><span class="line"></span></div>
+</section>
+
+<div class="trust-strip">
+  <div class="container trust-grid">
+    <div class="trust-item reveal"><div class="ic">£</div><div><strong>Affordable</strong><span>Great value for quality work</span></div></div>
+    <div class="trust-item reveal" style="transition-delay:.1s"><div class="ic">✔</div><div><strong>Reliable</strong><span>You can count on us every time</span></div></div>
+    <div class="trust-item reveal" style="transition-delay:.2s"><div class="ic">📍</div><div><strong>Local</strong><span>Proudly serving our community</span></div></div>
+    <div class="trust-item reveal" style="transition-delay:.3s"><div class="ic">%</div><div><strong>Discounts</strong><span>For regular customers</span></div></div>
+  </div>
+</div>
+
+<section class="section services" id="services">
+  <div class="container">
+    <div class="section-head">
+      <div class="section-tag reveal">What We Do</div>
+      <h2 class="reveal">Our Services</h2>
+      <p class="reveal">Every job, big or small, is finished with the same attention to detail — here's how we help keep your outdoor space looking its best all year round.</p>
+    </div>
+    <div class="service-grid">
+      <div class="service-card reveal-scale">
+        <div class="service-icon-wrap">🌱</div>
+        <h3>Lawn Care &amp; Maintenance</h3>
+        <p class="desc">Keeping your lawn healthy, green and neatly kept, whatever the season.</p>
+        <ul>
+          <li><span class="check">✓</span>Mowing &amp; edging</li>
+          <li><span class="check">✓</span>Weeding &amp; feeding</li>
+          <li><span class="check">✓</span>Lawn treatments</li>
+          <li><span class="check">✓</span>Seasonal maintenance</li>
+        </ul>
+      </div>
+      <div class="service-card amber reveal-scale" style="transition-delay:.1s">
+        <div class="service-icon-wrap">🏡</div>
+        <h3>Landscape Design &amp; Installation</h3>
+        <p class="desc">Full garden transformations designed and built around how you want to live outdoors.</p>
+        <ul>
+          <li><span class="check">✓</span>Patios, paths &amp; driveways</li>
+          <li><span class="check">✓</span>Fencing &amp; decking</li>
+          <li><span class="check">✓</span>Planting &amp; borders</li>
+          <li><span class="check">✓</span>Full garden makeovers</li>
+        </ul>
+      </div>
+      <div class="service-card reveal-scale" style="transition-delay:.2s">
+        <div class="service-icon-wrap">🌳</div>
+        <h3>Tree &amp; Shrub Care</h3>
+        <p class="desc">Expert pruning and shaping that keeps trees and shrubs healthy and looking their best.</p>
+        <ul>
+          <li><span class="check">✓</span>Pruning &amp; shaping</li>
+          <li><span class="check">✓</span>Hedge trimming</li>
+          <li><span class="check">✓</span>Plant health care</li>
+          <li><span class="check">✓</span>Tree maintenance</li>
+        </ul>
+      </div>
+      <div class="service-card amber reveal-scale" style="transition-delay:.3s">
+        <div class="service-icon-wrap">💦</div>
+        <h3>Jet Wash</h3>
+        <p class="desc">Deep-cleaning exterior surfaces to bring patios, paths and driveways back to life.</p>
+        <ul>
+          <li><span class="check">✓</span>Patios, driveways &amp; paths</li>
+          <li><span class="check">✓</span>Decking, fences &amp; walls</li>
+          <li><span class="check">✓</span>Exterior cleaning</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section why" id="why">
+  <div class="container">
+    <div class="section-head">
+      <div class="section-tag reveal">The Sinclair's Difference</div>
+      <h2 class="reveal">Why Choose Us?</h2>
+      <p class="reveal">A friendly, local business built on quality workmanship and genuine care for every garden we look after.</p>
+    </div>
+    <div class="why-grid">
+      <div class="why-card reveal" style="transition-delay:0s"><div class="num">01</div><h4>Friendly &amp; Local</h4><p>A small business proudly serving our own community.</p></div>
+      <div class="why-card reveal" style="transition-delay:.1s"><div class="num">02</div><h4>High-Quality Work</h4><p>Workmanship you can see and feel the difference in.</p></div>
+      <div class="why-card reveal" style="transition-delay:.2s"><div class="num">03</div><h4>Fully Insured</h4><p>Dependable cover for total peace of mind.</p></div>
+      <div class="why-card reveal" style="transition-delay:.3s"><div class="num">04</div><h4>Attention to Detail</h4><p>Every job finished properly, right down to the last edge.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="section showcase" id="work">
+  <div class="container showcase-grid">
+    <div class="showcase-visual reveal-left">
+      <div class="layer"></div>
+      <div class="grain"></div>
+      <div class="path"></div>
+      <div class="blob b1"></div>
+      <div class="blob b2"></div>
+      <div class="blob b3"></div>
+      <div class="content-mark">
+        <div class="icon">🌿</div>
+        <h3>Let's create something amazing together</h3>
+        <p>Every project starts with a conversation about what you want your garden to feel like.</p>
+      </div>
+    </div>
+    <div class="showcase-text reveal-right">
+      <h2>Gardens designed around the way you live</h2>
+      <p>Whether it's a quick weekly tidy-up or a complete outdoor renovation, we plan every project around your space, your budget and your timeline — no job too big or too small.</p>
+      <div class="showcase-list">
+        <div class="row"><div class="ic">📋</div><div><strong>Free, no-obligation quotes</strong><span>Honest pricing with no hidden costs.</span></div></div>
+        <div class="row"><div class="ic">🛠️</div><div><strong>Skilled, careful workmanship</strong><span>Every detail checked before we call a job done.</span></div></div>
+        <div class="row"><div class="ic">🔁</div><div><strong>Exclusive regular-customer discounts</strong><span>Ongoing maintenance plans that save you money.</span></div></div>
+      </div>
+      <a href="#contact" class="btn">Request Your Free Quote →</a>
+    </div>
+  </div>
+</section>
+
+<section class="section testimonial">
+  <div class="container">
+    <div class="testi-card reveal-scale">
+      <div class="quote-mark">"</div>
+      <div class="stars">★★★★★</div>
+      <p>Reliable, professional and always go the extra mile.</p>
+      <div class="testi-name">A Happy Sinclair's Customer</div>
+      <div class="testi-role">Basingstoke, Hampshire</div>
+    </div>
+  </div>
+</section>
+
+<section class="section cta" id="contact">
+  <div class="container cta-inner">
+    <div class="reveal-left">
+      <div class="section-tag" style="justify-content:flex-start; color:var(--amber-light);"><span></span>Get In Touch Today</div>
+      <h2>For a free, no-obligation quote</h2>
+      <p>Tell us a little about your garden and what you'd like done — we'll get back to you quickly with honest, affordable pricing.</p>
+      <div class="hero-stats">
+        <div><div class="num">Fast</div><div class="lbl">Response times</div></div>
+        <div><div class="num">Fair</div><div class="lbl">Transparent pricing</div></div>
+      </div>
+    </div>
+    <div class="contact-card reveal-right">
+      <div class="contact-row">
+        <div class="ic">📞</div>
+        <div class="info">
+          <span class="lbl">Call or WhatsApp</span>
+          <div class="phone-line">
+            <a href="tel:07466561093">07466 561093</a>
+            <a href="https://wa.me/447466561093?text=Hi%20Sinclair's%2C%20I'd%20like%20a%20free%20quote" target="_blank" class="wa-badge" title="Message us on WhatsApp">
+              <svg viewBox="0 0 32 32" fill="#fff"><path d="M16 0C7.163 0 0 7.163 0 16c0 2.837.744 5.5 2.05 7.8L0 32l8.4-2.2A15.9 15.9 0 0 0 16 32c8.837 0 16-7.163 16-16S24.837 0 16 0zm0 29.2c-2.55 0-4.95-.7-7-1.95l-.5-.3-4.65 1.2 1.25-4.55-.35-.55A13.15 13.15 0 0 1 2.8 16C2.8 8.7 8.7 2.8 16 2.8S29.2 8.7 29.2 16 23.3 29.2 16 29.2zm7.25-9.9c-.4-.2-2.35-1.15-2.7-1.3-.35-.15-.6-.2-.85.2-.25.35-1 1.3-1.2 1.55-.25.25-.45.3-.85.1-2.25-1.1-3.75-2.05-5.25-4.65-.4-.7.4-.65 1.15-2.15.15-.25.05-.45-.05-.65-.1-.2-.9-2.2-1.25-3-.3-.75-.65-.65-.9-.65-.25 0-.55 0-.85 0-.3 0-.75.1-1.15.55-.4.45-1.55 1.5-1.55 3.65s1.6 4.25 1.85 4.55c.25.3 3.15 4.85 7.75 6.55 3.85 1.45 3.85.95 4.55.85.7-.1 2.35-.95 2.7-1.9.35-.95.35-1.75.25-1.9-.1-.15-.35-.25-.75-.45z"/></svg>
+            </a>
+          </div>
+        </div>
+      </div>
+      <div class="contact-row">
+        <div class="ic">✉️</div>
+        <div class="info">
+          <span class="lbl">Email</span>
+          <a href="mailto:info@sinclairslandscapingandgardeningservices.co.uk">info@sinclairslandscaping...co.uk</a>
+        </div>
+      </div>
+      <div class="contact-row">
+        <div class="ic">📍</div>
+        <div class="info">
+          <span class="lbl">Area Covered</span>
+          <span class="val">Basingstoke &amp; Surrounding Areas</span>
+        </div>
+      </div>
+      <a href="mailto:info@sinclairslandscapingandgardeningservices.co.uk?subject=Free%20Quote%20Request" class="btn">Send an Enquiry →</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container footer-top">
+    <div class="footer-brand"><div class="mark">🌳</div><strong>Sinclair's Landscape &amp; Gardening Services</strong></div>
+    <div class="footer-links">
+      <a href="#services">Services</a>
+      <a href="#why">Why Us</a>
+      <a href="#work">Our Work</a>
+      <a href="#contact">Contact</a>
+    </div>
+  </div>
+  <div class="container footer-bottom">
+    <span>© 2026 Sinclair's Landscape &amp; Gardening Services. All rights reserved.</span>
+    <span>Let's create something amazing together 🌿</span>
+  </div>
+</footer>
+
+<a href="https://wa.me/447466561093?text=Hi%20Sinclair's%2C%20I'd%20like%20a%20free%20quote" target="_blank" class="wa-float" title="Chat on WhatsApp">
+  <svg viewBox="0 0 32 32" fill="#fff"><path d="M16 0C7.163 0 0 7.163 0 16c0 2.837.744 5.5 2.05 7.8L0 32l8.4-2.2A15.9 15.9 0 0 0 16 32c8.837 0 16-7.163 16-16S24.837 0 16 0zm0 29.2c-2.55 0-4.95-.7-7-1.95l-.5-.3-4.65 1.2 1.25-4.55-.35-.55A13.15 13.15 0 0 1 2.8 16C2.8 8.7 8.7 2.8 16 2.8S29.2 8.7 29.2 16 23.3 29.2 16 29.2zm7.25-9.9c-.4-.2-2.35-1.15-2.7-1.3-.35-.15-.6-.2-.85.2-.25.35-1 1.3-1.2 1.55-.25.25-.45.3-.85.1-2.25-1.1-3.75-2.05-5.25-4.65-.4-.7.4-.65 1.15-2.15.15-.25.05-.45-.05-.65-.1-.2-.9-2.2-1.25-3-.3-.75-.65-.65-.9-.65-.25 0-.55 0-.85 0-.3 0-.75.1-1.15.55-.4.45-1.55 1.5-1.55 3.65s1.6 4.25 1.85 4.55c.25.3 3.15 4.85 7.75 6.55 3.85 1.45 3.85.95 4.55.85.7-.1 2.35-.95 2.7-1.9.35-.95.35-1.75.25-1.9-.1-.15-.35-.25-.75-.45z"/></svg>
+</a>
+
+<script>
+const header = document.getElementById('siteHeader');
+window.addEventListener('scroll', ()=>{
+  if(window.scrollY > 40){ header.classList.add('scrolled'); } else { header.classList.remove('scrolled'); }
+});
+
+const burger = document.getElementById('burger');
+const nav = document.getElementById('mainNav');
+burger.addEventListener('click', ()=>{
+  nav.classList.toggle('open');
+});
+nav.querySelectorAll('a').forEach(a=>a.addEventListener('click', ()=>nav.classList.remove('open')));
+
+const revealEls = document.querySelectorAll('.reveal, .reveal-scale, .reveal-left, .reveal-right');
+const observer = new IntersectionObserver((entries)=>{
+  entries.forEach(entry=>{
+    if(entry.isIntersecting){ entry.target.classList.add('visible'); }
+  });
+}, {threshold:0.15});
+revealEls.forEach(el=>observer.observe(el));
+
+const leafContainer = document.getElementById('heroLeaves');
+const leafChars = ['🍃','🌿','🍀'];
+for(let i=0;i<14;i++){
+  const l = document.createElement('span');
+  l.className = 'leaf-particle';
+  l.textContent = leafChars[Math.floor(Math.random()*leafChars.length)];
+  l.style.left = Math.random()*100+'%';
+  l.style.animationDuration = (10 + Math.random()*10)+'s';
+  l.style.animationDelay = (Math.random()*10)+'s';
+  l.style.fontSize = (16 + Math.random()*18)+'px';
+  leafContainer.appendChild(l);
+}
+</script>
+</body>
+</html>
