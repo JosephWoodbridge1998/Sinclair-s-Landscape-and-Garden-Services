@@ -818,5 +818,54 @@ for(let i=0;i<14;i++){
  else init();
 })();
 </script>  
+
+  <!-- Sinclair garden emoji mix: paste once before </body>, after existing scripts. -->
+<style>
+#heroLeaves { pointer-events:none; }
+@media (prefers-reduced-motion: reduce) {
+  #heroLeaves { display:none !important; }
+}
+</style>
+<script>
+(function () {
+  function applyGardenMix() {
+    const layer = document.getElementById('heroLeaves');
+    if (!layer || layer.dataset.gardenMix === 'ready') return;
+    layer.dataset.gardenMix = 'ready';
+    layer.setAttribute('aria-hidden', 'true');
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const existing = Array.from(layer.querySelectorAll('.leaf-particle'));
+    // Preserve existing particle positions, durations and animation timings.
+    const symbols = ['🍃','🌿','🍂','🍃','🌱','🌿','🍃','🪵','🍂','🌳','🌿','🍃','🍂','🏡','🌱','🍃','🌿','🍂','🌳','🪵'];
+    function styleParticle(el, i) {
+      const symbol = symbols[i % symbols.length];
+      el.textContent = symbol;
+      if (symbol === '🏡' || symbol === '🪵' || symbol === '🌳') {
+        el.style.fontSize = symbol === '🏡' ? '19px' : '22px';
+        el.style.filter = 'opacity(.65)';
+      }
+    }
+    if (existing.length) {
+      existing.forEach(styleParticle);
+    } else if (!reduce.matches) {
+      // Fallback only if the original particle script created no particles.
+      const count = window.innerWidth < 600 ? 12 : 20;
+      for (let i = 0; i < count; i++) {
+        const el = document.createElement('span');
+        el.className = 'leaf-particle';
+        el.style.top = '0';
+        el.style.left = (4 + i * 92 / count) + '%';
+        el.style.animationDuration = (18 + Math.random() * 14) + 's';
+        el.style.animationDelay = (-Math.random() * 30) + 's';
+        styleParticle(el, i);
+        layer.appendChild(el);
+      }
+    }
+  }
+  // Run after the existing scripts and DOMContentLoaded handlers finish.
+  if (document.readyState === 'complete') applyGardenMix();
+  else window.addEventListener('load', applyGardenMix, { once:true });
+})();
+</script>
 </body>
 </html>
