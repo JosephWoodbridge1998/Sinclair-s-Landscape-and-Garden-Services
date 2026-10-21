@@ -604,5 +604,113 @@ for(let i=0;i<14;i++){
   leafContainer.appendChild(l);
 }
 </script>
+
+
+
+
+ <!-- Sinclair's official branding update: paste immediately before </body> -->
+<style>
+/* Scoped branding additions: existing colours and animations are retained. */
+.brand .mark, .brand .name, .footer-brand .mark { display: none; }
+.sinclair-header-logo {
+  display:block; width:78px; height:78px; object-fit:contain;
+  background:#fff; border-radius:12px; padding:3px;
+}
+#siteHeader { gap:18px; }
+#siteHeader.scrolled .sinclair-header-logo { width:64px; height:64px; }
+.sinclair-header-logo { transition:width .4s ease,height .4s ease; }
+.hero.sinclair-branded { display:block; }
+.sinclair-hero-layout {
+  position:relative; z-index:2; width:100%; max-width:1280px; margin:0 auto;
+  display:grid; grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);
+  gap:48px; align-items:center; padding:155px 5% 110px; min-height:100vh;
+}
+.sinclair-hero-layout .hero-content { padding:0; max-width:none; }
+.sinclair-logo-panel {
+  position:relative; width:100%; max-width:450px; justify-self:center;
+  padding:18px; background:#fff; border-radius:24px;
+  border:1px solid rgba(255,255,255,.5);
+  box-shadow:0 24px 65px rgba(0,0,0,.24);
+}
+.sinclair-logo-panel img { width:100%; height:auto; display:block; border-radius:12px; }
+.sinclair-footer-logo { width:132px; height:auto; background:#fff; padding:6px; border-radius:12px; }
+@media(max-width:1100px) {
+  #siteHeader nav ul { gap:20px; }
+  #siteHeader .nav-cta { gap:8px; }
+  .sinclair-hero-layout { gap:28px; }
+}
+@media(max-width:980px) {
+  .sinclair-hero-layout { grid-template-columns:1fr; padding:135px 24px 75px; gap:32px; }
+  .sinclair-hero-layout .hero-content { max-width:680px; }
+  .sinclair-logo-panel { max-width:310px; padding:12px; }
+  .sinclair-header-logo { width:66px; height:66px; }
+  #siteHeader.scrolled .sinclair-header-logo { width:58px; height:58px; }
+  .hero.sinclair-branded .scroll-cue { display:none; }
+}
+@media(max-width:480px) {
+  .sinclair-logo-panel { max-width:260px; }
+  .sinclair-hero-layout .hero-stats { gap:20px; }
+}
+@media(prefers-reduced-motion:reduce) {
+  .sinclair-branded *, .sinclair-branded::before { animation:none !important; transition:none !important; }
+  .sinclair-branded .reveal { opacity:1; transform:none; }
+  .sinclair-header-logo { transition:none; }
+}
+</style>
+<script>
+(function () {
+  function applySinclairBranding() {
+    if (document.documentElement.dataset.sinclairBranding === 'ready') return;
+    const hero = document.querySelector('.hero');
+    const content = hero && hero.querySelector('.hero-content');
+    const brand = document.querySelector('#siteHeader .brand');
+    if (!hero || !content || !brand) {
+      console.warn('Sinclair branding: expected existing page elements not found.');
+      return;
+    }
+    const logoPath = './images/sinclairs-logo.webp';
+    const logoAlt = "Sinclair’s Landscape and Gardening Services";
+    function image(className, eager) {
+      const img = document.createElement('img');
+      img.src = logoPath;
+      img.alt = logoAlt;
+      img.className = className;
+      img.width = 1048;
+      img.height = 1043;
+      img.loading = eager ? 'eager' : 'lazy';
+      img.decoding = 'async';
+      return img;
+    }
+    brand.setAttribute('aria-label', logoAlt + ' — Home');
+    brand.appendChild(image('sinclair-header-logo', true));
+    const layout = document.createElement('div');
+    layout.className = 'sinclair-hero-layout';
+    content.before(layout);
+    layout.appendChild(content);
+    const panel = document.createElement('div');
+    panel.className = 'sinclair-logo-panel reveal';
+    panel.appendChild(image('sinclair-hero-logo', true));
+    layout.appendChild(panel);
+    hero.classList.add('sinclair-branded');
+    const footerBrand = document.querySelector('.footer-brand');
+    if (footerBrand) footerBrand.prepend(image('sinclair-footer-logo', false));
+    if ('IntersectionObserver' in window) {
+      const observer = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.1 });
+      observer.observe(panel);
+    } else panel.classList.add('visible');
+    document.documentElement.dataset.sinclairBranding = 'ready';
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', applySinclairBranding);
+  } else applySinclairBranding();
+})();
+</script> 
 </body>
 </html>
