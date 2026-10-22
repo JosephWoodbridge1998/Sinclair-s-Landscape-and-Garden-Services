@@ -1,0 +1,44 @@
+name: Refine Sinclair contact layout
+on:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/refine-contact-layout.yml']
+permissions:
+  contents: write
+  pages: write
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Update contact layout
+        shell: python
+        run: |
+          from pathlib import Path
+          import re
+          p = Path('index.html')
+          text = p.read_text(encoding='utf-8')
+          text = re.sub(r'<a class="btn-outline" href="mailto:[^"]*">.*?</a>', '', text, flags=re.S)
+          wa = 'https://wa.me/447466561093?text=Hi%20Daniel%2C%20I%20would%20like%20a%20quote%20for%20my%20garden.'
+          email = 'info@sinclairslandscapingandgardeningservices.co.uk'
+          areas = 'Reading, Woodley, Burghfield, Thatcham, Compton and surrounding areas'
+          facebook = 'https://www.facebook.com/profile.php?id=61593034853185'
+          fbicon = '<svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor" aria-hidden="true"><path d="M14 21v-8h3l.5-4H14V7c0-1 .3-2 2-2h2V1.5A25 25 0 0 0 15 1c-3 0-5 2-5 5v3H7v4h3v8z"/></svg>'
+          markup = '<section class="section cta" id="contact"><div class="container cta-inner"><div><h2>Let’s talk about your garden</h2><p>Serving '+areas+'. WhatsApp is our preferred contact method. Tell Daniel what you need and where the work is located.</p><div class="sinclair-contact-actions"><a class="btn" href="'+wa+'" target="_blank" rel="noopener noreferrer">Get a quote on WhatsApp →</a></div></div><div class="contact-card"><div class="contact-row"><div class="ic" aria-hidden="true">💬</div><div class="info"><span class="lbl">Get in touch on WhatsApp</span><a href="'+wa+'" target="_blank" rel="noopener noreferrer">07466 561093</a></div></div><div class="contact-row"><div class="ic" aria-hidden="true">✉</div><div class="info"><span class="lbl">Email</span><a href="mailto:'+email+'">'+email+'</a></div></div><div class="contact-row"><div class="ic">'+fbicon+'</div><div class="info"><a href="'+facebook+'" target="_blank" rel="noopener noreferrer" aria-label="Sinclair’s Garden and Landscaping Services on Facebook (opens in a new tab)">Sinclair’s Garden and Landscaping Services</a></div></div><div class="contact-row"><div class="info"><span class="lbl">Areas we cover</span><span class="val">'+areas+'</span></div></div></div></div></section>'
+          text, count = re.subn(r'<section\b[^>]*id="contact"[^>]*>.*?</section>', lambda m: markup, text, count=1, flags=re.S|re.I)
+          assert count == 1, 'Contact section not found; no changes written'
+          assert text.count('mailto:'+email) == 1, 'Unexpected extra email links; no changes written'
+          p.write_text(text, encoding='utf-8')
+      - name: Commit contact layout
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add index.html
+          if ! git diff --cached --quiet; then
+            git commit -m 'Prioritise WhatsApp and add confirmed Facebook contact link'
+            git push origin HEAD:main
+          fi
+      - name: Request Pages build
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh api --method POST repos/${{ github.repository }}/pages/builds
