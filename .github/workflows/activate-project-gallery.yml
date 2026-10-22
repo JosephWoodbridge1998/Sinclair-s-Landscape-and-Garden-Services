@@ -1,0 +1,37 @@
+name: Activate project gallery when images are ready
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'images/projects/**'
+      - 'gallery-upgrade.js'
+      - 'gallery-upgrade.css'
+      - 'scripts/install-gallery.py'
+      - '.github/workflows/activate-project-gallery.yml'
+permissions:
+  contents: write
+concurrency:
+  group: activate-project-gallery
+  cancel-in-progress: false
+jobs:
+  activate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install only when every image is present
+        run: python scripts/install-gallery.py
+      - name: Commit homepage activation if changed
+        run: |
+          if ! git diff --quiet -- index.html; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add index.html
+            git commit -m "Activate van photo, project gallery and falling leaves"
+            git push origin HEAD:main
+          fi
