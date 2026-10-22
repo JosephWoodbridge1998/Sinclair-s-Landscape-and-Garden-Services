@@ -1,0 +1,4 @@
+Gallery release: 2026-10-22
+Homepage repair commit: a4a00d5ba663ee4c6a92497a8464a9173f67ee08
+Gallery script moved outside HTML comments.
+This release marker triggers a Pages build from the repaired main branch.
