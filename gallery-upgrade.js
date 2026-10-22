@@ -78,3 +78,33 @@
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded',init); else init();
 })();
+
+(() => {
+  'use strict';
+  function addContactPreference() {
+    const contact = document.getElementById('contact');
+    if (!contact || document.getElementById('sinclair-contact-preference')) return;
+    const main = contact.querySelector('.cta-inner > div');
+    if (!main) return;
+    const whatsapp = main.querySelector('a[href*="wa.me/"]');
+    const block = document.createElement('div');
+    block.id = 'sinclair-contact-preference';
+    block.style.cssText = 'margin:20px 0 24px;padding:20px;border:1px solid rgba(255,255,255,.28);border-left:4px solid #f4a35e;border-radius:14px;background:rgba(255,255,255,.07);max-width:100%;min-width:0;color:#fff;';
+    const note = document.createElement('p');
+    note.textContent = 'For quotes and project enquiries, please contact us on WhatsApp.';
+    note.style.cssText = 'font-size:16px;line-height:1.7;color:#fff;margin:0 0 16px;max-width:none;';
+    const label = document.createElement('p');
+    label.textContent = 'Prefer email?';
+    label.style.cssText = 'font-size:16px;font-weight:600;color:#fff;margin:0 0 6px;line-height:1.5;';
+    const email = document.createElement('a');
+    email.href = 'mailto:info@sinclairslandscapingandgardeningservices.co.uk';
+    email.textContent = 'info@sinclairslandscapingandgardeningservices.co.uk';
+    email.style.cssText = 'display:block;max-width:100%;font-size:16px;line-height:1.7;color:#fff;text-decoration:underline;text-underline-offset:4px;overflow-wrap:anywhere;';
+    block.append(note,label,email);
+    const actions = whatsapp && whatsapp.closest('.sinclair-contact-actions');
+    if (actions && main.contains(actions)) actions.after(block);
+    else if (whatsapp) whatsapp.after(block);
+    else main.append(block);
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded',addContactPreference); else addContactPreference();
+})();
