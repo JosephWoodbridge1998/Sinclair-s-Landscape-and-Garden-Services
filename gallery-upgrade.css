@@ -1,33 +1,42 @@
-/* Gallery upgrade: scoped styles; services remain untouched. */
+/* Gallery styles scoped to preserve services and the existing site. */
 .hero .leaf-particle{top:0;animation-name:sinclairFallingLeaf}
 @keyframes sinclairFallingLeaf{0%{transform:translateY(-10vh) rotate(0deg);opacity:0}10%{opacity:.5}90%{opacity:.4}100%{transform:translateY(110vh) rotate(360deg);opacity:0}}
 .showcase-visual.van-panel{background:#e9e6de;height:auto;aspect-ratio:4/3;display:flex;align-items:center}
 .showcase-visual.van-panel img{width:100%;height:100%;object-fit:contain}
-.project-gallery{background:var(--paper,#fff);scroll-margin-top:100px}
+.project-gallery{--gallery-red:#b52d27;--gallery-green:#205735;background:radial-gradient(ellipse at 0 0,#e8f1e9 0,transparent 48%),radial-gradient(ellipse at 100% 100%,#faeae6 0,transparent 42%),#fbf8f1;scroll-margin-top:100px;border-top:1px solid #dce5da}
 .project-gallery [hidden],.project-lightbox [hidden]{display:none!important}
-.project-filters{display:flex;justify-content:center;flex-wrap:wrap;gap:10px;margin:-20px 0 42px}
-.project-filters button,.lightbox-navigation button,.lightbox-close{font:inherit;cursor:pointer;border:1px solid var(--line,#e6e2d6);border-radius:30px;padding:11px 20px;background:var(--cream,#fbf8f1);color:var(--forest,#0f3d24)}
-.project-filters button[aria-pressed=true]{background:var(--forest,#0f3d24);color:#fff;border-color:var(--forest,#0f3d24)}
-.project-group-title{font-size:28px;color:var(--forest,#0f3d24);margin-bottom:22px}
-.project-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px}
-.project-card{min-width:0;overflow:hidden;border:1px solid var(--line,#e6e2d6);border-radius:22px;background:var(--cream,#fbf8f1);transition:transform .25s,box-shadow .25s}
-.project-card:hover{transform:translateY(-4px);box-shadow:var(--shadow)}
-.project-image-button{position:relative;display:block;width:100%;height:300px;padding:12px 12px 42px;border:0;background:#efeee8;cursor:zoom-in}
+.project-gallery .section-head h2{color:#143d25}.project-gallery .section-tag{color:var(--gallery-red)}
+.project-gallery .section-tag::before,.project-gallery .section-tag::after{background:var(--gallery-red)}
+.project-filters{display:flex;justify-content:center;flex-wrap:wrap;gap:10px;margin:-20px 0 44px}
+.project-filters button,.lightbox-navigation button,.lightbox-close{font:inherit;cursor:pointer;border:1px solid #d5dfd4;border-radius:30px;padding:11px 20px;background:#fff;color:#174429;transition:background .2s,box-shadow .2s}
+.project-filters button:hover{background:#eef4ec}
+.project-filters button[aria-pressed=true]{background:#174429;color:#fff;border-color:#174429;box-shadow:0 6px 18px #143d2526}
+.project-filters button[data-view=active][aria-pressed=true]{background:var(--gallery-red);border-color:var(--gallery-red)}
+.project-group-title{display:flex;align-items:center;gap:12px;font-size:28px;color:#174429;margin-bottom:22px}
+.project-group-title::before{content:'';width:5px;height:30px;border-radius:4px;background:#2e7d4f;flex-shrink:0}
+.active-project-group .project-group-title::before{background:var(--gallery-red)}
+.project-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:26px}
+.project-card{min-width:0;overflow:hidden;border:1px solid #dce5da;border-top:4px solid #2e7d4f;border-radius:22px;background:#fff;box-shadow:0 8px 24px #143d2509;transition:transform .25s,box-shadow .25s}
+.project-card-active{border-top-color:var(--gallery-red)}
+.project-card:hover{transform:translateY(-5px);box-shadow:0 16px 35px #143d2520}
+.project-image-button{position:relative;display:block;width:100%;height:300px;padding:14px 14px 44px;border:0;background:linear-gradient(145deg,#f1f5ee,#f9f7f1);cursor:zoom-in}
+.project-card-active .project-image-button{background:linear-gradient(145deg,#faf0ec,#f9f7f1)}
 .project-image-button img{width:100%;height:100%;object-fit:contain}
-.project-view-hint{position:absolute;bottom:12px;right:16px;font:500 12px 'Poppins',sans-serif;color:var(--forest,#0f3d24)}
-.project-card-text{padding:20px 22px 24px}.project-card-text h4{font-size:17px;font-weight:600;margin-top:10px;line-height:1.5}
-.project-status{display:inline-block;font-size:11px;font-weight:600;letter-spacing:.3px;border-radius:20px;padding:5px 10px;background:#e0eee3;color:#205735}
-.project-status.is-active{background:#ffead7;color:#784014}
-.active-project-group{margin-top:56px}.project-group-note{color:var(--muted,#5c6d63);font-size:14px;line-height:1.7;margin:-10px 0 24px}
-.project-enquiry{text-align:center;margin-top:48px}.project-enquiry p{margin-bottom:14px;color:var(--muted,#5c6d63)}
-.project-lightbox{width:min(1100px,94vw);max-width:94vw;max-height:94dvh;margin:auto;border:0;border-radius:18px;padding:18px;background:#fbf8f1;color:#132118;box-shadow:0 20px 80px #0008}
+.project-view-hint{position:absolute;bottom:12px;right:16px;font:500 12px 'Poppins',sans-serif;color:#205735}
+.project-card-text{padding:20px 22px 26px}.project-card-text h4{font-size:17px;font-weight:600;margin-top:12px;line-height:1.5;color:#163c25}
+.project-status{display:inline-flex;align-items:center;gap:7px;font-size:11px;font-weight:600;letter-spacing:.2px;border-radius:20px;padding:6px 11px;background:#e4f1e5;color:#205735}
+.project-status::before{content:'';width:6px;height:6px;border-radius:50%;background:currentColor;flex-shrink:0}
+.project-status.is-active{background:#fbe8e4;color:#9b2923}
+.active-project-group{margin-top:60px;padding-top:36px;border-top:1px solid #dedfd4}
+.project-group-note{color:#5c6d63;font-size:14px;line-height:1.7;margin:-10px 0 26px;max-width:720px}
+.project-enquiry{text-align:center;margin-top:48px;padding:32px 24px;border-radius:22px;background:linear-gradient(120deg,#0f3d24,#24653d);border-bottom:4px solid var(--gallery-red)}
+.project-enquiry p{margin-bottom:18px;color:#fff;font-size:18px}
+.project-lightbox{width:min(1100px,94vw);max-width:94vw;max-height:94dvh;margin:auto;border:0;border-top:4px solid #2e7d4f;border-radius:18px;padding:18px;background:#fbf8f1;color:#132118;box-shadow:0 20px 80px #0008}
 .project-lightbox::backdrop{background:rgba(5,18,10,.88)}
-.lightbox-toolbar{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:14px}
-.lightbox-toolbar h3{font-size:18px;line-height:1.4}.lightbox-close{flex-shrink:0}
+.lightbox-toolbar{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:14px}.lightbox-toolbar h3{font-size:18px;line-height:1.4}.lightbox-close{flex-shrink:0}
 .project-lightbox>img{max-width:100%;width:auto;max-height:72dvh;object-fit:contain;margin:auto}
-.lightbox-navigation{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:14px;font-size:13px}
-.lightbox-navigation button:disabled{opacity:.4;cursor:default}
-.project-gallery button:focus-visible,.project-lightbox button:focus-visible{outline:3px solid #e8873a;outline-offset:3px}
+.lightbox-navigation{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:14px;font-size:13px}.lightbox-navigation button:disabled{opacity:.4;cursor:default}
+.project-gallery button:focus-visible,.project-gallery a:focus-visible,.project-lightbox button:focus-visible{outline:3px solid #b52d27;outline-offset:4px}
 @media(max-width:980px){.project-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media(max-width:600px){.project-grid{grid-template-columns:1fr}.project-image-button{height:320px}.project-group-title{font-size:24px}.lightbox-toolbar h3{font-size:15px}.lightbox-close{padding:8px 12px}.lightbox-navigation button{padding:8px 10px}}
-@media(prefers-reduced-motion:reduce){.hero .leaf-particle{animation:none;display:none}.project-card{transition:none}.project-card:hover{transform:none}}
+@media(max-width:600px){.project-grid{grid-template-columns:1fr}.project-image-button{height:320px}.project-group-title{font-size:24px}.project-filters button{font-size:13px;padding:10px 14px}.lightbox-toolbar h3{font-size:15px}.lightbox-close{padding:8px 12px}.lightbox-navigation button{padding:8px 10px}.project-enquiry p{font-size:16px}}
+@media(prefers-reduced-motion:reduce){.hero .leaf-particle{animation:none;display:none}.project-card,.project-filters button{transition:none}.project-card:hover{transform:none}}
