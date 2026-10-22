@@ -1,0 +1,66 @@
+name: Apply confirmed Sinclair details
+on:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/update-client-details.yml']
+permissions:
+  contents: write
+  pages: write
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Update client content
+        shell: python
+        run: |
+          from pathlib import Path
+          import re, html
+          p = Path('index.html')
+          text = p.read_text(encoding='utf-8')
+          areas = 'Reading, Woodley, Burghfield, Thatcham, Compton and surrounding areas'
+          text = re.sub(r'Basingstoke(?:-based)?(?: and (?:the )?surrounding areas?)?', areas, text, flags=re.I)
+          text = text.replace('Reading and surrounding area', areas).replace('Reading-based', 'Serving your local area')
+          wa = 'https://wa.me/447466561093?text=Hi%20Daniel%2C%20I%20would%20like%20a%20quote%20for%20my%20garden.'
+          email = 'info@sinclairslandscapingandgardeningservices.co.uk'
+          groups = [('Garden Maintenance','Regular care and tidy-ups for your outdoor space.','🌿',['Mowing','Weeding','Hedge trimming','Strimming','Pruning & shaping']),('Lawns & Landscaping','New lawn surfaces to suit your garden.','🌱',['Turfing','Artificial grass installation']),('Outdoor Construction','Practical additions and improvements for your outdoor space.','🏡',['Decking','Fencing','Patios','Driveways','Garden structures & outbuildings']),('Cleaning & Clearance','Freshen up and clear your outdoor space.','💦',['Jet washing','Garden clearance'])]
+          cards = []
+          for i,(title,desc,icon,items) in enumerate(groups):
+              lis = ''.join('<li><span class="check" aria-hidden="true">✓</span>'+html.escape(item)+'</li>' for item in items)
+              classes = 'service-card reveal-scale' + (' amber' if i%2 else '')
+              cards.append(f'<div class="{classes}" style="transition-delay:{i/10}s"><div class="service-icon-wrap" aria-hidden="true">{icon}</div><h3>{html.escape(title)}</h3><p class="desc">{desc}</p><ul>{lis}</ul></div>')
+          services = '<section class="section services" id="services"><div class="container"><div class="section-head"><div class="section-tag reveal">What We Do</div><h2 class="reveal">Our Services</h2><p class="reveal">Gardening and landscaping across '+areas+'. Explore our full range of services below.</p></div><div class="service-grid">'+''.join(cards)+'</div></div></section>'
+          text,n = re.subn(r'<section\b[^>]*id="services"[^>]*>.*?</section>', lambda m: services, text, count=1, flags=re.S|re.I)
+          assert n == 1, 'Services section not found; stopping without writing'
+          reviews = ['awesome work, thank you very much, I now know who to call when I need work done','great service, great rates, great guy','Daniel has great ideas for garden makeovers, he listens to what is needed and takes time to go through options','Daniel has given me his opinion for a garden renovation as he thought I needed a more safer space then my original idea due to mobility issues, very happy with the work, very kind young man']
+          quotes = ''.join('<div class="testi-card reveal"><p>&ldquo;'+html.escape(q)+'&rdquo;</p><div class="testi-name">Customer feedback</div></div>' for q in reviews)
+          testimonial = '<section class="section testimonial"><div class="container"><div class="section-head"><div class="section-tag">Customer Feedback</div><h2>What our customers say</h2></div><div class="sinclair-review-grid">'+quotes+'</div></div></section>'
+          text,n = re.subn(r'<section\b[^>]*class="[^"]*\btestimonial\b[^"]*"[^>]*>.*?</section>', lambda m: testimonial, text, count=1, flags=re.S|re.I)
+          assert n == 1, 'Testimonial section not found; stopping without writing'
+          buttons = '<a class="btn" href="'+wa+'" target="_blank" rel="noopener noreferrer">Get a quote on WhatsApp →</a><a class="btn-outline" href="mailto:'+email+'">Email Daniel</a>'
+          text,n = re.subn(r'<div class="hero-ctas[^"]*">.*?</div>', lambda m: '<div class="hero-ctas reveal">'+buttons+'</div>', text, count=1, flags=re.S)
+          assert n == 1, 'Hero buttons not found; stopping without writing'
+          text,n = re.subn(r'<div class="nav-cta">.*?</div>', lambda m: '<div class="nav-cta">'+buttons+'</div>', text, count=1, flags=re.S)
+          assert n == 1, 'Navigation buttons not found; stopping without writing'
+          contact = '<section class="section cta" id="contact"><div class="container cta-inner"><div><h2>Let’s talk about your garden</h2><p>Serving '+areas+'. WhatsApp is our preferred contact method. Tell Daniel what you need and where the work is located.</p><div class="sinclair-contact-actions">'+buttons+'</div></div><div class="contact-card"><div class="contact-row"><div class="ic" aria-hidden="true">☎</div><div class="info"><span class="lbl">Call or WhatsApp</span><a href="tel:+447466561093">07466 561093</a></div></div><div class="contact-row"><div class="ic" aria-hidden="true">✉</div><div class="info"><span class="lbl">Email</span><a href="mailto:'+email+'">'+email+'</a></div></div><div class="contact-row"><div class="info"><span class="lbl">Areas we cover</span><span class="val">'+areas+'</span></div></div><div class="contact-row"><button class="sinclair-facebook" type="button" disabled aria-label="Facebook page link coming soon"><svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor" aria-hidden="true"><path d="M14 21v-8h3l.5-4H14V7c0-1 .3-2 2-2h2V1.5A25 25 0 0 0 15 1c-3 0-5 2-5 5v3H7v4h3v8z"/></svg>Facebook — link coming soon</button></div></div></div></section>'
+          text,n = re.subn(r'<section\b[^>]*id="contact"[^>]*>.*?</section>', lambda m: contact, text, count=1, flags=re.S|re.I)
+          assert n == 1, 'Contact section not found; stopping without writing'
+          text = re.sub(r'<a\b([^>]*href=")mailto:[^"]*("[^>]*)>.*?</a>', lambda m: '<a'+m.group(1)+'mailto:'+email+m.group(2)+'>'+email+'</a>', text, flags=re.S|re.I)
+          css = '<style id="sinclair-confirmed-content">.sinclair-review-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px}.sinclair-review-grid .testi-card{width:100%;padding:38px 28px}.sinclair-review-grid .testi-card p{font-size:19px}.sinclair-contact-actions{display:flex;flex-wrap:wrap;gap:14px}.contact-row .info{min-width:0}.contact-row .info a,.contact-row .info .val{overflow-wrap:anywhere}.sinclair-facebook{display:flex;align-items:center;gap:10px;padding:12px 16px;color:white;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.25);border-radius:12px;font:inherit;opacity:.7;cursor:not-allowed}@media(max-width:700px){.sinclair-review-grid{grid-template-columns:1fr}.sinclair-review-grid .testi-card{padding:30px 22px}}</style>'
+          text = text.replace('</head>', css+'\n</head>', 1)
+          assert 'Basingstoke' not in text, 'Unreplaced location found'
+          p.write_text(text, encoding='utf-8')
+          print('Updated all four service groups, four supplied reviews, coverage and contact options. Opening hours removed with old contact section.')
+      - name: Commit confirmed details
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add index.html
+          if ! git diff --cached --quiet; then
+            git commit -m 'Apply Daniel confirmed services coverage reviews and contact details'
+            git push origin HEAD:main
+          fi
+      - name: Request Pages build
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh api --method POST repos/${{ github.repository }}/pages/builds
