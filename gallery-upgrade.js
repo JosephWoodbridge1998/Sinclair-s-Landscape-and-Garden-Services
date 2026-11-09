@@ -5,6 +5,7 @@
     const intro = document.getElementById('about-work');
     if (!intro) return;
     const base = 'images/projects/';
+    const imageSrc = name => name.startsWith('http') ? name : base + name + '.webp';
     const entries = [
       ['Back garden pergola','Before & After',['back-garden-pergola']],
       ['Fence panel replacement','Before & After',['fence-panel-replacement']],
@@ -14,13 +15,13 @@
       ['Ditch clearance','Before & After',['ditch-clearance']],
       ['Garden path construction','Work stages',['garden-path']],
       ['Covered garden seating','Before & After',['covered-seating']],
-      ['Patio installation','Before & After',['patio-installation']]
+      ['Patio installation','Before & After',['patio-installation']],
+      ['Driveway','Before & After',['driveway-pending','https://drive.google.com/uc?export=view&id=1vSw5m7m5RnedHxQFs88nso9FaAbMWlfv','https://drive.google.com/uc?export=view&id=1fPd5bQ6wgBArgFIwHApDJIMDkZVX3SJ0','https://drive.google.com/uc?export=view&id=1SnL6e21FpTLNX4GvXcWD-wwcyYz-egSt']]
     ];
     const active = [
       ['Fish pond','Projects in progress',['fish-pond-pending']],
       ['Garden clearance','Projects in progress',['garden-clearance-underway']],
-      ['Garden renovation','Projects in progress',['garden-renovation-underway']],
-      ['Driveway','Projects in progress',['driveway-pending']]
+      ['Garden renovation','Projects in progress',['garden-renovation-underway']]
     ];
     const visual = intro.querySelector('.showcase-visual');
     if (visual) {
@@ -41,7 +42,7 @@
     document.body.append(dialog);
     let current = null, position = 0;
     function renderImage() {
-      const img = dialog.querySelector('img'); img.src = base + current[2][position] + '.webp';
+      const img = dialog.querySelector('img'); img.src = imageSrc(current[2][position]);
       img.alt = current[0] + ' — ' + current[1] + ', image ' + (position + 1);
       dialog.querySelector('h3').textContent = current[0] + ' · ' + current[1];
       dialog.querySelector('.lightbox-navigation span').textContent = (position + 1) + ' / ' + current[2].length;
@@ -58,7 +59,7 @@
       const article = document.createElement('article'); article.className = 'project-card' + (ongoing ? ' project-card-active' : '');
       const button = document.createElement('button'); button.type = 'button'; button.className = 'project-image-button';
       button.setAttribute('aria-label', 'View ' + entry[0] + ' — ' + entry[1]);
-      const img = document.createElement('img'); img.src = base + entry[2][0] + '.webp'; img.alt = entry[0] + ' — ' + entry[1];
+      const img = document.createElement('img'); img.src = imageSrc(entry[2][0]); img.alt = entry[0] + ' — ' + entry[1];
       img.loading = 'lazy'; img.decoding = 'async'; button.append(img);
       const hint = document.createElement('span'); hint.className = 'project-view-hint';
       hint.textContent = entry[2].length > 1 ? 'View ' + entry[2].length + ' images ↗' : 'View full image ↗';
