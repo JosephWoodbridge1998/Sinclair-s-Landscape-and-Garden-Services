@@ -5,7 +5,7 @@
     const intro = document.getElementById('about-work');
     if (!intro) return;
     const base = 'images/projects/';
-    const imageSrc = name => name.startsWith('http') ? name : base + name + '.webp';
+    const imageSrc = name => base + name + (/\.(?:jpe?g|webp|png)$/i.test(name) ? '' : '.webp');
     const entries = [
       ['Back garden pergola','Before & After',['back-garden-pergola']],
       ['Fence panel replacement','Before & After',['fence-panel-replacement']],
@@ -16,7 +16,7 @@
       ['Garden path construction','Work stages',['garden-path']],
       ['Covered garden seating','Before & After',['covered-seating']],
       ['Patio installation','Before & After',['patio-installation']],
-      ['Driveway','Before & After',['driveway-pending','https://drive.google.com/uc?export=view&id=1vSw5m7m5RnedHxQFs88nso9FaAbMWlfv','https://drive.google.com/uc?export=view&id=1fPd5bQ6wgBArgFIwHApDJIMDkZVX3SJ0','https://drive.google.com/uc?export=view&id=1SnL6e21FpTLNX4GvXcWD-wwcyYz-egSt']]
+      ['Driveway','Before & After',['driveway-pending','driveway-complete-1.jpeg','driveway-complete-2.jpeg','driveway-complete-3.jpeg']]
     ];
     const active = [
       ['Fish pond','Projects in progress',['fish-pond-pending']],
