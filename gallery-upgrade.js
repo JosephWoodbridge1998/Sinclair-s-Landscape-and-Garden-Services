@@ -38,7 +38,7 @@
     intro.after(section);
     const dialog = document.createElement('dialog'); dialog.className = 'project-lightbox';
     dialog.setAttribute('aria-labelledby','project-lightbox-title');
-    dialog.innerHTML = `<div class="lightbox-toolbar"><h3 id="project-lightbox-title"></h3><button type="button" class="lightbox-close" aria-label="Close full image">Close ×</button></div><p class="driveway-image-note" hidden style="margin:0 0 16px;padding:12px 16px;border-left:4px solid #347a50;border-radius:6px;background:#eaf2e8;color:#183e29;font-size:16px;line-height:1.5">Work in progress — click “Next image” to see the completed work.</p><img alt=""><div class="lightbox-navigation"><button type="button" class="lightbox-prev">← Previous image</button><span aria-live="polite"></span><button type="button" class="lightbox-next">Next image →</button></div>`;
+    dialog.innerHTML = `<div class="lightbox-toolbar"><h3 id="project-lightbox-title"></h3><button type="button" class="lightbox-close" aria-label="Close full image">Close ×</button></div><p class="driveway-image-note" hidden style="margin:0 0 16px;padding:12px 16px;border-left:4px solid #347a50;border-radius:6px;background:#eaf2e8;color:#183e29;font-size:16px;line-height:1.5">Project Completed — click “Next image” to see the full before and after</p><img alt=""><div class="lightbox-navigation"><button type="button" class="lightbox-prev">← Previous image</button><span aria-live="polite"></span><button type="button" class="lightbox-next">Next image →</button></div>`;
     document.body.append(dialog);
     let current = null, position = 0;
     function renderImage() {
